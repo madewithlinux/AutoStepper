@@ -8,7 +8,7 @@ java {
 }
 
 group 'com.phr00t'
-version '1.7.1-SNAPSHOT'
+version '1.8.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -20,6 +20,9 @@ dependencies {
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation group: 'net.sf.trove4j', name: 'trove4j', version: '3.0.3'
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
+
+    implementation 'commons-io:commons-io:2.13.0'
+
     // https://mvnrepository.com/artifact/ws.schild/jave-all-deps
     implementation group: 'ws.schild', name: 'jave-all-deps', version: '3.3.1'
 }

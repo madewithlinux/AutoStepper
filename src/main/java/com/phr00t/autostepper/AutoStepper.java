@@ -11,6 +11,11 @@ import gnu.trove.list.array.TFloatArrayList;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.apache.commons.io.FilenameUtils;
+import ws.schild.jave.Encoder;
+import ws.schild.jave.MultimediaObject;
+import ws.schild.jave.encode.AudioAttributes;
+import ws.schild.jave.encode.EncodingAttributes;
 
 /**
  *
@@ -68,6 +73,31 @@ public class AutoStepper {
         return false;
     }
 
+    private static File convertToMp3(File inputFile, File ouputFolder) {
+        try {
+            File target = new File(ouputFolder, FilenameUtils.removeExtension(inputFile.getName()) + ".mp3");
+
+            //Audio Attributes
+            AudioAttributes audio = new AudioAttributes();
+            audio.setCodec("libmp3lame");
+            audio.setBitRate(128000);
+            audio.setChannels(2);
+            audio.setSamplingRate(44100);
+
+            //Encoding attributes
+            EncodingAttributes attrs = new EncodingAttributes();
+            attrs.setOutputFormat("mp3");
+            attrs.setAudioAttributes(audio);
+
+            //Encode
+            Encoder encoder = new Encoder();
+            encoder.encode(new MultimediaObject(inputFile), target, attrs);
+            return target;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public static void main(String[] args) {
         minim = new Minim(myAS);
         String outputDir, input;
@@ -89,7 +119,9 @@ public class AutoStepper {
         }
         MAX_BPM = Float.parseFloat(getArg(args, "maxbpm", "170f"));
         outputDir = getArg(args, "output", ".");
-        if (outputDir.endsWith("/") == false) outputDir += "/";
+        if (outputDir.endsWith("/") == false) {
+            outputDir += "/";
+        }
         input = getArg(args, "input", ".");
         duration = Float.parseFloat(getArg(args, "duration", "-1"));
         STARTSYNC = Float.parseFloat(getArg(args, "synctime", "0.0"));
@@ -108,7 +140,7 @@ public class AutoStepper {
             File[] allfiles = inputFile.listFiles();
             for (File f : allfiles) {
                 String extCheck = f.getName().toLowerCase();
-                if (f.isFile() && (extCheck.endsWith(".mp3") || extCheck.endsWith(".wav"))) {
+                if (f.isFile() && isSuppportedExtension(extCheck)) {
                     myAS.analyzeUsingAudioRecordingStream(f, duration, outputDir, args, FFTSIZE, STEP_GRAN);
                 } else {
                     System.out.println("Skipping unsupported file: " + f.getName());
@@ -117,6 +149,16 @@ public class AutoStepper {
         } else {
             System.out.println("Couldn't find any input files.");
         }
+    }
+
+    private static boolean isSuppportedExtension(String extCheck) {
+        return (
+            extCheck.endsWith(".mp3") ||
+            extCheck.endsWith(".wav") ||
+            extCheck.endsWith(".aac") ||
+            extCheck.endsWith(".ogg") ||
+            extCheck.endsWith(".egg")
+        );
     }
 
     TFloatArrayList calculateDifferences(TFloatArrayList arr, float timeThreshold) {
@@ -283,6 +325,10 @@ public class AutoStepper {
         int fftSize,
         int stepGranularity
     ) {
+        if (!filename.getName().endsWith(".mp3")) {
+            filename = convertToMp3(filename, new File(outputDir));
+        }
+
         AudioRecordingStream stream = minim.loadFileStream(filename.getAbsolutePath(), fftSize, false);
 
         if (seconds <= 0) {
