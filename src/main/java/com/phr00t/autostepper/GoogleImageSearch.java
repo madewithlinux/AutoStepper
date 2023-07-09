@@ -17,10 +17,13 @@ public class GoogleImageSearch {
         String finRes = "";
 
         try {
-            String googleUrl = "https://www.google.com/search?as_st=y&tbm=isch&as_q=" + question.replace(",", "+").replace(" ", "+") + "&as_epq=&as_oq=&as_eq=&cr=&as_sitesearch=&safe=images&tbs=isz:lt,islt:vga,iar:w";
+            String googleUrl =
+                "https://www.google.com/search?as_st=y&tbm=isch&as_q=" +
+                question.replace(",", "+").replace(" ", "+") +
+                "&as_epq=&as_oq=&as_eq=&cr=&as_sitesearch=&safe=images&tbs=isz:lt,islt:vga,iar:w";
             Document doc1 = Jsoup.connect(googleUrl).userAgent(ua).timeout(8 * 1000).get();
             Elements elems = doc1.select("[data-src]");
-            if( elems.isEmpty() ) {
+            if (elems.isEmpty()) {
                 System.out.println("Couldn't find any images for: " + question);
                 return;
             }
