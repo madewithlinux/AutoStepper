@@ -113,5 +113,7 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/java,gradle,intellij+all
 
 .history/
+/data/
+
 # Ignore Gradle build output directory
 build

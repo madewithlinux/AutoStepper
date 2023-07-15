@@ -4,7 +4,6 @@ import ddf.minim.AudioMetaData;
 import ddf.minim.AudioSample;
 import ddf.minim.Minim;
 import ddf.minim.MultiChannelBuffer;
-import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import ddf.minim.spi.AudioRecordingStream;
 import gnu.trove.list.array.TFloatArrayList;
@@ -342,10 +341,10 @@ public class AutoStepper {
         stream.play();
 
         // create the fft/beatdetect objects we'll use for analysis
-        BeatDetect manybd = new BeatDetect(BeatDetect.FREQ_ENERGY, fftSize, stream.getFormat().getSampleRate());
-        BeatDetect fewbd = new BeatDetect(BeatDetect.FREQ_ENERGY, fftSize, stream.getFormat().getSampleRate());
-        BeatDetect manybde = new BeatDetect(BeatDetect.SOUND_ENERGY, fftSize, stream.getFormat().getSampleRate());
-        BeatDetect fewbde = new BeatDetect(BeatDetect.SOUND_ENERGY, fftSize, stream.getFormat().getSampleRate());
+        ModifiedBeatDetect manybd = new ModifiedBeatDetect(ModifiedBeatDetect.FREQ_ENERGY, fftSize, stream.getFormat().getSampleRate());
+        ModifiedBeatDetect fewbd = new ModifiedBeatDetect(ModifiedBeatDetect.FREQ_ENERGY, fftSize, stream.getFormat().getSampleRate());
+        ModifiedBeatDetect manybde = new ModifiedBeatDetect(ModifiedBeatDetect.SOUND_ENERGY, fftSize, stream.getFormat().getSampleRate());
+        ModifiedBeatDetect fewbde = new ModifiedBeatDetect(ModifiedBeatDetect.SOUND_ENERGY, fftSize, stream.getFormat().getSampleRate());
         manybd.setSensitivity(BPM_SENSITIVITY);
         manybde.setSensitivity(BPM_SENSITIVITY);
         fewbd.setSensitivity(60f / MAX_BPM);

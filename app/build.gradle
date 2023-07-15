@@ -44,7 +44,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.phr00t.autostepper.App'
+    mainClass = 'com.phr00t.autostepper.AutoStepper'
 }
 
 tasks.named('test') {

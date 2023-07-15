@@ -16,10 +16,11 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package ddf.minim.analysis;
+package com.phr00t.autostepper;
 
 import ddf.minim.AudioBuffer;
 import ddf.minim.Minim;
+import ddf.minim.analysis.FFT;
 
 /**
  * The BeatDetect class allows you to analyze an audio stream for beats (rhythmic onsets).
@@ -73,7 +74,7 @@ import ddf.minim.Minim;
  * @example Analysis/SoundEnergyBeatDetection
  */
 
-public class BeatDetect
+public class ModifiedBeatDetect
 {
     /** Constant used to request frequency energy tracking mode.
      *
@@ -116,7 +117,7 @@ public class BeatDetect
      * mode with meaningful values.
      *
      */
-    public BeatDetect(int algo, int timeSize, float sampleRate) {
+    public ModifiedBeatDetect(int algo, int timeSize, float sampleRate) {
         this.sampleRate = (int)sampleRate;
         this.timeSize = timeSize;
         if( algo == SOUND_ENERGY ) {
